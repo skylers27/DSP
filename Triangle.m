@@ -1,43 +1,46 @@
 %Skyler Szot
-%Square wave program
+%Triangular wave program
 
 clear all;
 close all;
 
-t = -1:0.01:1; %initialize t
+t = -2:0.01:2; %initialize t
+
 actual = zeros(1,length(t)); %initialize piecewise function storage array
 
 for i = 1:length(t) %initialize piecewise function
-    if((t(i)<-.85)||(-.15 < t(i)) && (t(i)< .15)||(t(i)>.85)) 
-        actual(i) = 1;
-    else
-        actual(i) = 0;
+    if(t(i)<-1)
+        actual(i) = (-2 * t(i))-3;
+    elseif(-1<=t(i) && t(i)<0)
+        actual(i) = (2*t(i)+1);
+    elseif(0<=t(i) && t(i)<1)
+        actual(i) = (-2*t(i)+1);
+    elseif(1<=t(i))
+        actual(i) = (2*t(i)-3);
     end
 end
 
-figure;
 i = 0;
+figure;
 for N=10*2.^[0:4] %loop through N = 10,20,40,80,160
     
     i = i + 1; %iteration counter
-    T = 1; %period
+    T = 2; %period
     w = (2*pi)/T; %fundamental frequency
     x = 0; %initialize x
     
-    for k = 1 : N %sum 1 to N
-    x = x + (1/T)*(sin(.3*pi*k)/(pi*k))*(2*T*cos(k*w*t)); %ak = (sin(.3*pi*k)/(pi*k))
+    for k = 1 :2: N %sum only odd k values, even = 0
+    x = x + (4 * (1/T))/(k.^2 * pi.^2)*(2*T*cos(k*w*t)); %ak = (8 * (1/T))/(k.^2 * pi.^2)
     end
-    x = x + .3; %ak0 = .3
-
+    %a0 = 0, so x = x
 
     subplot(2,3,i);
-    plot(t, x) %plot synthesis equation
+    plot(t,x) %plot synthesis equation
     hold on
-    
+
     plot(t, actual) %plot actual piecewise function
     title(['N= ',num2str(N)])
     hold on
-    
 
     MSE(i) = sum(abs(x - actual).^2)/length(t); %calculate MSE
 end
