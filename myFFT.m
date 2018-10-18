@@ -1,7 +1,7 @@
 function bin = myFFT(x)
     N = length(x);
     if N == 1
-        bin = x
+        bin = x;
         return
     end
     Xeven = x(1:2:N);
