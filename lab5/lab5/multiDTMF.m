@@ -1,39 +1,44 @@
+%multiDTMF.m
+%Skyler Szot
+%input a file of 10 dial tone pairs, decodes phone number
+
 clear all;
 close all;
 
-[data, fsamp] = audioread('testfun4.wav');
-data = myExpand(data);
-result = [];
-for i = 1 : 10
+file = input('Enter a file name (including extension): ','s'); %user input
+
+[data, fsamp] = audioread(file);
+
+data = myExpand(data); %expand data
+
+result = []; %initialize result array
+for i = 1 : 10 %loop through 10 digits
     
-    sample = data((1+(2200*(i-1))):(2200*(i-1)+2000));
-    npts = length(sample);
-    freqDiv=fsamp/npts;
+    sample = data((1+(2200*(i-1))):(2200*(i-1)+2000)); %parse
+    npts = length(sample); %npts
+    freqDiv=fsamp/npts; %calculate frequency axis
     freq=freqDiv*(0:npts/2-1);
 
-    DFT = myDFT(sample,npts);
-    P = 20*log10(abs(DFT));
-    
-    %figure;
-    %plot(freq, P)
+    DFT = myDFT(sample,npts); %calcualte DFT
+    P = 20*log10(abs(DFT)); %calcualte log scale
 
-    %DTFMgen(770,1477);
+    [pks,locs] = findpeaks(P); %use builting to find peaks
+    threshold = 40; %threshold to remove all but actual tones
+    v = []; %initialize real locations array
 
-    [pks,locs] = findpeaks(P);
-    threshold = 40;
-    v = [];
     for i = 1:length(pks)
-        if pks(i) > threshold
-            v = [v, freq(locs(i))];
+        if pks(i) > threshold %filter
+            v = [v, freq(locs(i))]; %append to real location array
         end
     end
-    roundTargets = [697, 770, 852, 941, 1209, 1336, 1477, 1633];
-    %vRounded = interp1(roundTargets,roundTargets,realloc,'nearest')
     
+    %round to nearest actual value
+    roundTargets = [697, 770, 852, 941, 1209, 1336, 1477, 1633];
     [~,idx] = min(bsxfun(@(x,y)abs(x-y),v,roundTargets.')); %index of closest
     vRounded = roundTargets(idx); %extract values
 
-    x = getNum(vRounded(1),vRounded(2));
-    result = [result, x];
+    x = getNum(vRounded(1),vRounded(2)); %translate freq -> number
+    result = [result, x]; %append to full result array
 end
-result
+result %display full result
+soundsc(data,fsamp) %play tone

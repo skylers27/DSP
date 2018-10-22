@@ -1,4 +1,9 @@
+%getNum.m
+%Skyler Szot
+%translates frequency to value
+
 function [num] = getNum(fr,fc)
+    %check all cases
     if fr == 697
         if fc == 1209
             num = '1';

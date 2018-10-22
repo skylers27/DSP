@@ -1,4 +1,9 @@
+%getFreq.m
+%Skyler Szot
+%translates value to frequency
+
 function [fr, fc] = getFreq(x)
+    %check all cases
     if x == '1'
         fr = 697;
         fc = 1209;
@@ -9,13 +14,13 @@ function [fr, fc] = getFreq(x)
         fr = 697;
         fc = 1477;
     elseif x == '4'
-        fr = 941;
+        fr = 770;
         fc = 1209;
     elseif x == '5'
-        fr = 941;
+        fr = 770;
         fc = 1336;
     elseif x == '6'
-        fr = 941;
+        fr = 770;
         fc = 1477;
     elseif x == '7'
         fr = 852;
@@ -34,7 +39,7 @@ function [fr, fc] = getFreq(x)
         fc = 1209;
     elseif x == '#'
         fr = 941;
-        fc = 1633;
+        fc = 1477;
     elseif x == 'A'
         fr = 697;
         fc = 1633;
