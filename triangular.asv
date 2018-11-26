@@ -1,0 +1,6 @@
+function w = triangular(M) %pass n and M
+    for n = 1:M/2+1
+        w(n) = 2*(n-1)/M;
+    end
+    for n = M/2+1:M+1
+end
